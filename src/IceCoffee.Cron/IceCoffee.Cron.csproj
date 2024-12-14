@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0;net8.0;netstandard2.0;net462</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<OutputType>Library</OutputType>
+		<Authors>IceCoffee</Authors>
+		<Company>LuoShuiTianYi</Company>
+		<Copyright>Copyright (c) 2024 IceCoffee</Copyright>
+		<Description>A simple C# library for running tasks based on a cron schedule.</Description>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<LangVersion>10.0</LangVersion>
+		<!--取消方法注释警告-->
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/1249993110/IceCoffee.Cron</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<RepositoryUrl>https://github.com/1249993110/IceCoffee.Cron</RepositoryUrl>
+		<Version>1.0.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Cronos" Version="0.9.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Remove="System.Net.Http" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE" Pack="true" PackagePath="" Visible="false" />
+		<None Include="..\..\README.md" Pack="true" PackagePath="" Visible="false" />
+	</ItemGroup>
+</Project>
