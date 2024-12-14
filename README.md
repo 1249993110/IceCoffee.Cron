@@ -33,6 +33,7 @@ IceCoffee.Cron supports most cron scheduling. See tests for supported formats.
 
 | Expression            | Description                                                                           |
 |-----------------------|---------------------------------------------------------------------------------------|
+| `*/1 * * * * *`       | Every second                                                                          |
 | `* * * * *`           | Every minute                                                                          |
 | `0 0 1 * *`           | At midnight, on day 1 of every month                                                  |
 | `*/5 * * * *`         | Every 5 minutes                                                                       |
