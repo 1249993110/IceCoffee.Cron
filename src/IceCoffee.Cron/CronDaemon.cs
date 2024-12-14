@@ -11,6 +11,9 @@ namespace IceCoffee.Cron
 
         public IReadOnlyDictionary<string, ICronJob> CronJobs => _cronJobs;
 
+        private static readonly Lazy<CronDaemon> _default = new(true);
+        public static CronDaemon Default => _default.Value;
+
         public CronDaemon()
         {
             _timer.AutoReset = true;
