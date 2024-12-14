@@ -6,13 +6,13 @@ namespace Demo
     {
         static void Main(string[] args)
         {
-            // 创建 CronDaemon
+            // Create CronDaemon instance
             var daemon = new CronDaemon();
 
-            // 添加任务
+            // Add jobs
             daemon.AddJob(new CronJob(
                 "Job1",
-                "*/1 * * * * *", // 每秒运行一次
+                "*/1 * * * * *", // Run every second
                 () =>
                 {
                     Console.WriteLine($"Job1 executed at {DateTime.Now}");
@@ -20,31 +20,31 @@ namespace Demo
 
             daemon.AddJob(new CronJob(
                 "Job2",
-                "*/5 * * * * *", // 每 5 秒运行一次
+                "*/5 * * * * *", // Run every 5 seconds
                 async () =>
                 {
                     Console.WriteLine($"Job2 executed at {DateTime.Now}");
-                    await Task.Delay(100); // 模拟任务执行
+                    await Task.Delay(100); // Simulate job execution
                 }));
 
             daemon.AddJob(new CronJob(
                 "Job3",
-                "0 */1 * * * *", // 每分钟的第 0 秒运行
+                "0 */1 * * * *", // Run at the 0th second of every minute
                 async () =>
                 {
                     Console.WriteLine($"Job3 executed at {DateTime.Now}");
-                    await Task.Delay(100); // 模拟任务执行
+                    await Task.Delay(100); // Simulate job execution
                 }));
 
-            // 启动 CronDaemon
+            // Start CronDaemon
             daemon.Start();
             Console.WriteLine($"CronDaemon started at {DateTime.Now}");
 
-            // 等待用户输入停止程序
+            // Wait for user input to stop the program
             Console.WriteLine("Press any key to stop...");
             Console.ReadKey();
 
-            // 停止 CronDaemon
+            // Stop CronDaemon
             daemon.Stop();
             Console.WriteLine($"CronDaemon stopped at {DateTime.Now}");
             Console.ReadKey();
