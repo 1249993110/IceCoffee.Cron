@@ -51,6 +51,11 @@ namespace IceCoffee.Cron
             _timer.Stop();
         }
 
+        public void Clear()
+        {
+            _cronJobs.Clear();
+        }
+
         private void OnTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             DateTime now = DateTime.Now;

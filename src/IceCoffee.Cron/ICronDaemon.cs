@@ -38,5 +38,10 @@
         /// Stop the daemon.
         /// </summary>
         void Stop();
+
+        /// <summary>
+        /// Clear all jobs in the daemon.
+        /// </summary>
+        void Clear();
     }
 }
