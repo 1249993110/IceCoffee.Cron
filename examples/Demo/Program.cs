@@ -12,7 +12,7 @@ namespace Demo
             // Add jobs
             daemon.AddJob(new CronJob(
                 "Job1",
-                "*/1 * * * * *", // Run every second
+                "* * * * * *", // Run every second
                 () =>
                 {
                     Console.WriteLine($"Job1 executed at {DateTime.Now}");
@@ -20,7 +20,7 @@ namespace Demo
 
             daemon.AddJob(new CronJob(
                 "Job2",
-                "*/5 * * * * *", // Run every 5 seconds
+                "0/5 * * * * ?", // Run every 5 seconds
                 async () =>
                 {
                     Console.WriteLine($"Job2 executed at {DateTime.Now}");
@@ -29,7 +29,7 @@ namespace Demo
 
             daemon.AddJob(new CronJob(
                 "Job3",
-                "0 */1 * * * *", // Run at the 0th second of every minute
+                "0 * * * * ?", // Run at the 0th second of every minute
                 async () =>
                 {
                     Console.WriteLine($"Job3 executed at {DateTime.Now}");

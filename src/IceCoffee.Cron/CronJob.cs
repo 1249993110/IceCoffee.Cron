@@ -42,7 +42,7 @@ namespace IceCoffee.Cron
 
         private static CronExpression ParseCronExpression(string cronExpression)
         {
-            return cronExpression.Split(' ').Length == 6
+            return cronExpression.Split(' ').Length >= 6
                 ? CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds)
                 : CronExpression.Parse(cronExpression);
         }
