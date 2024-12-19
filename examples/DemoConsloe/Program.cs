@@ -7,7 +7,7 @@ namespace Demo
         static void Main(string[] args)
         {
             // Create CronDaemon instance
-            var daemon = new CronDaemon();
+            ICronDaemon daemon = new CronDaemon();
 
             // Add jobs
             daemon.AddJob(new CronJob(

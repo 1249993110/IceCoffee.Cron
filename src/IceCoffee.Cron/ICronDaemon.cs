@@ -8,19 +8,19 @@
         /// <summary>
         /// All jobs in the daemon.
         /// </summary>
-        IReadOnlyDictionary<string, ICronJob> CronJobs { get; }
+        IReadOnlyDictionary<string, CronJob> CronJobs { get; }
 
         /// <summary>
         /// Add a job to the daemon. If the job name already exists, it will be overwritten.
         /// </summary>
         /// <param name="cronJob"></param>
-        void AddJob(ICronJob cronJob);
+        void AddJob(CronJob cronJob);
 
         /// <summary>
         /// Remove a job from the daemon.
         /// </summary>
         /// <param name="cronJob"></param>
-        bool RemoveJob(ICronJob cronJob);
+        bool RemoveJob(CronJob cronJob);
 
         /// <summary>
         /// Remove a job from the daemon.

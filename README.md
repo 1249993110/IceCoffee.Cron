@@ -12,6 +12,7 @@ IceCoffee.Cron is a simple C# library for running tasks based on a cron schedule
 
 ```sh
 $ dotnet add package IceCoffee.Cron
+$ dotnet add package IceCoffee.Cron.DependencyInjection # (optional) If you want use DI
 ```
 
 ## Cron Schedules
@@ -103,4 +104,65 @@ namespace Demo
         }
     }
 }
+```
+
+### Example with Asp.Net Core and D.I
+
+#### Implements CronJobService
+
+```csharp
+using IceCoffee.Cron;
+using IceCoffee.Cron.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+namespace DemoWeb.Services
+{
+    public class MyCronJob1 : CronJobService
+    {
+        public MyCronJob1(ICronDaemon cronDaemon, IOptionsMonitor<CronJobOptions> optionsMonitor) : base(cronDaemon, optionsMonitor)
+        {
+        }
+
+        public override Task Execute()
+        {
+            Console.WriteLine($"Job1 executed at {DateTime.Now}");
+            return Task.CompletedTask;
+        }
+    }
+}
+
+```
+
+#### Configure Services
+
+```csharp
+using DemoWeb.Services;
+using IceCoffee.Cron.DependencyInjection;
+
+namespace DemoWeb
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            var services = builder.Services;
+            services.AddCronJob<MyCronJob1>(options =>
+            {
+                options.TimeZone = TimeZoneInfo.Local.Id;
+                options.CronExpression = "0/5 * * * * ?";
+            });
+
+            services.AddCronJob<MyCronJob2>(builder.Configuration.GetSection("CronJobOptions"));
+
+            var app = builder.Build();
+            
+            app.MapGet("/", () => "Hello World!");
+
+            app.Run();
+        }
+    }
+}
+
 ```

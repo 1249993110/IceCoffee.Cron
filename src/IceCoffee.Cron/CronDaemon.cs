@@ -6,10 +6,10 @@ namespace IceCoffee.Cron
     public class CronDaemon : ICronDaemon
     {
         private readonly System.Timers.Timer _timer = new System.Timers.Timer(500);
-        private readonly ConcurrentDictionary<string, ICronJob> _cronJobs = new();
+        private readonly ConcurrentDictionary<string, CronJob> _cronJobs = new();
         private DateTime _lastRunTime;
 
-        public IReadOnlyDictionary<string, ICronJob> CronJobs => _cronJobs;
+        public IReadOnlyDictionary<string, CronJob> CronJobs => _cronJobs;
 
         private static readonly Lazy<CronDaemon> _default = new(true);
         public static CronDaemon Default => _default.Value;
@@ -20,12 +20,12 @@ namespace IceCoffee.Cron
             _timer.Elapsed += OnTimer_Elapsed;
         }
 
-        public void AddJob(ICronJob cronJob)
+        public void AddJob(CronJob cronJob)
         {
             _cronJobs[cronJob.Name] = cronJob;
         }
 
-        public bool RemoveJob(ICronJob cronJob)
+        public bool RemoveJob(CronJob cronJob)
         {
             return _cronJobs.TryRemove(cronJob.Name, out _);
         }
@@ -63,7 +63,7 @@ namespace IceCoffee.Cron
             {
                 _lastRunTime = now;
                 //Parallel.ForEach(_cronJobs.Values, job => job.Execute(now, _cts.Token));
-                foreach (ICronJob job in _cronJobs.Values)
+                foreach (var job in _cronJobs.Values)
                 {
                     job.Execute(now);
                 }

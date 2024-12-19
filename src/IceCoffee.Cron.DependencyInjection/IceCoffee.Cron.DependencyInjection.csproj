@@ -4,11 +4,10 @@
 		<TargetFrameworks>net9.0;net8.0;netstandard2.0;net462</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<OutputType>Library</OutputType>
 		<Authors>IceCoffee</Authors>
 		<Company>LuoShuiTianYi</Company>
 		<Copyright>Copyright (c) 2024 IceCoffee</Copyright>
-		<Description>A simple C# library for running tasks based on a cron schedule.</Description>
+		<Description>Dependency injection extension for IceCoffee.Cron.</Description>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<LangVersion>10.0</LangVersion>
@@ -19,11 +18,12 @@
 		<PackageProjectUrl>https://github.com/1249993110/IceCoffee.Cron</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<RepositoryUrl>https://github.com/1249993110/IceCoffee.Cron</RepositoryUrl>
-		<Version>1.0.3</Version>
+		<Version>1.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Cronos" Version="0.9.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,6 +32,11 @@
 
 	<ItemGroup>
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" Visible="false" />
-		<None Include="..\..\README.md" Pack="true" PackagePath="" Visible="true" />
+		<None Include="..\..\README.md" Pack="true" PackagePath="" Visible="false" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\IceCoffee.Cron\IceCoffee.Cron.csproj" />
+	</ItemGroup>
+	
 </Project>
