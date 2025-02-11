@@ -24,5 +24,10 @@ namespace IceCoffee.Cron.DependencyInjection
         /// Whether the job is enabled.
         /// </summary>
         public bool IsEnabled { get; set; } = true;
+
+        /// <summary>
+        /// Whether the job is run once at start.
+        /// </summary>
+        public bool RunOnceAtStart {  get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace IceCoffee.Cron.DependencyInjection
 {
@@ -53,6 +54,12 @@ namespace IceCoffee.Cron.DependencyInjection
             {
                 var service = ActivatorUtilities.CreateInstance<T>(provider);
                 service.Name = name;
+
+                if (provider.GetRequiredService<IOptionsMonitor<CronJobOptions>>().Get(name).RunOnceAtStart)
+                {
+                    Task.Run(service.Execute).ConfigureAwait(false);
+                }
+
                 return service;
             });
         }

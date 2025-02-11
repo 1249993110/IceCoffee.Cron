@@ -13,7 +13,7 @@ namespace DemoWeb
             services.AddCronJob<MyCronJob1>(options =>
             {
                 options.TimeZone = TimeZoneInfo.Local.Id;
-                options.CronExpression = "0/5 * * * * ?";
+                options.CronExpression = "* * * * * ?";
             });
 
             services.AddCronJob<MyCronJob2>(builder.Configuration.GetSection("CronJobOptions"));
