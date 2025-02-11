@@ -10,7 +10,7 @@
 		<Description>Dependency injection extension for IceCoffee.Cron.</Description>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<!--取消方法注释警告-->
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
