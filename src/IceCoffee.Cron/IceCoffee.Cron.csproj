@@ -19,7 +19,7 @@
 		<PackageProjectUrl>https://github.com/1249993110/IceCoffee.Cron</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<RepositoryUrl>https://github.com/1249993110/IceCoffee.Cron</RepositoryUrl>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

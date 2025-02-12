@@ -33,6 +33,11 @@ namespace IceCoffee.Cron
         /// </summary>
         public TimeZoneInfo TimeZoneInfo { get; set; } = TimeZoneInfo.Local;
 
+        /// <summary>
+        /// Next run time.
+        /// </summary>
+        public DateTime? NextRunTime => _nextRunTime;
+
         public CronJob(string name, CronExpression cronExpression, Func<Task> action)
         {
             _action = action;
