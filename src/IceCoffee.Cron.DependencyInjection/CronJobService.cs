@@ -8,6 +8,9 @@ public abstract class CronJobService : IHostedService
     private readonly ICronDaemon _cronDaemon;
     private readonly IOptionsMonitor<CronJobOptions> _optionsMonitor;
 
+    public ICronDaemon CronDaemon => _cronDaemon;
+    public IOptionsMonitor<CronJobOptions> OptionsMonitor => _optionsMonitor;
+
     public string Name { get; internal set; } = null!;
 
     public CronJobService(ICronDaemon cronDaemon, IOptionsMonitor<CronJobOptions> optionsMonitor)
