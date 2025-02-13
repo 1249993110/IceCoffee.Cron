@@ -36,7 +36,7 @@ namespace IceCoffee.Cron
         /// <summary>
         /// Next run time.
         /// </summary>
-        public DateTime? NextRunTime => _nextRunTime;
+        public DateTime? NextRunTime => _nextRunTime ?? CronExpression.GetNextOccurrence(DateTimeOffset.Now, TimeZoneInfo)?.DateTime;
 
         public CronJob(string name, CronExpression cronExpression, Func<Task> action)
         {
