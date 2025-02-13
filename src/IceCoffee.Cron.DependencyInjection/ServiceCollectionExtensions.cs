@@ -55,7 +55,8 @@ namespace IceCoffee.Cron.DependencyInjection
                 var service = ActivatorUtilities.CreateInstance<T>(provider);
                 service.Name = name;
 
-                if (provider.GetRequiredService<IOptionsMonitor<CronJobOptions>>().Get(name).RunOnceAtStart)
+                var options = provider.GetRequiredService<IOptionsMonitor<CronJobOptions>>().Get(name);
+                if (options.IsEnabled && options.RunOnceAtStart)
                 {
                     Task.Run(service.Execute).ConfigureAwait(false);
                 }
