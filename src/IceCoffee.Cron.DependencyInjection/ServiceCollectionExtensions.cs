@@ -49,18 +49,16 @@ namespace IceCoffee.Cron.DependencyInjection
         private static void InternalAdd<T>(this IServiceCollection services, string name) where T : CronJobService
         {
             services.TryAddSingleton<ICronDaemon, CronDaemon>();
-            services.AddHostedService<CronDaemonService>();
+            services.TryAddSingleton<CronDaemonService>();
+            services.AddHostedService<CronDaemonService>(provider =>
+            {
+                var service = provider.GetRequiredService<CronDaemonService>();
+                return service;
+            });
             services.AddHostedService<T>(provider =>
             {
                 var service = ActivatorUtilities.CreateInstance<T>(provider);
                 service.Name = name;
-
-                var options = provider.GetRequiredService<IOptionsMonitor<CronJobOptions>>().Get(name);
-                if (options.IsEnabled && options.RunOnceAtStart)
-                {
-                    Task.Run(service.Execute).ConfigureAwait(false);
-                }
-
                 return service;
             });
         }

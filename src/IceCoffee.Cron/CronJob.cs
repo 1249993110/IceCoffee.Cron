@@ -9,6 +9,16 @@ namespace IceCoffee.Cron
         private volatile int _runningFlag;
 
         /// <summary>
+        /// Job action.
+        /// </summary>
+        public Func<Task> Action => _action;
+
+        /// <summary>
+        /// Whether the job is running.
+        /// </summary>
+        public bool IsRunning => _runningFlag > 0;
+
+        /// <summary>
         /// Job name.
         /// </summary>
         public string Name { get; private set; }
@@ -19,48 +29,45 @@ namespace IceCoffee.Cron
         public CronExpression CronExpression { get; private set; }
 
         /// <summary>
-        /// Whether the job is running.
+        /// Time zone information.
         /// </summary>
-        public bool IsRunning => _runningFlag > 0;
+        public TimeZoneInfo TimeZoneInfo { get; private set; }
 
         /// <summary>
         /// Whether the job allows concurrent execution.
         /// </summary>
-        public bool AllowConcurrentExecution { get; set; } = true;
-
-        /// <summary>
-        /// Time zone information.
-        /// </summary>
-        public TimeZoneInfo TimeZoneInfo { get; set; } = TimeZoneInfo.Local;
+        public bool AllowConcurrentExecution { get; private set; }
 
         /// <summary>
         /// Next run time.
         /// </summary>
         public DateTime? NextRunTime => _nextRunTime ?? CronExpression.GetNextOccurrence(DateTimeOffset.Now, TimeZoneInfo)?.DateTime;
 
-        public CronJob(string name, CronExpression cronExpression, Func<Task> action)
+        public CronJob(string name, CronExpression cronExpression, Func<Task> action, TimeZoneInfo? timeZoneInfo = null, bool allowConcurrentExecution = true)
         {
             _action = action;
             Name = name;
             CronExpression = cronExpression;
+            TimeZoneInfo = timeZoneInfo ?? TimeZoneInfo.Local;
+            AllowConcurrentExecution = allowConcurrentExecution;
         }
 
-        public CronJob(string name, CronExpression cronExpression, Action action) 
+        public CronJob(string name, CronExpression cronExpression, Action action, TimeZoneInfo? timeZoneInfo = null, bool allowConcurrentExecution = true)
             : this(name, cronExpression, () =>
             {
                 action.Invoke();
                 return Task.CompletedTask;
-            })
+            }, timeZoneInfo, allowConcurrentExecution)
         {
         }
 
-        public CronJob(string name, string cronExpression, Action action) 
-            : this(name, ParseCronExpression(cronExpression), action)
+        public CronJob(string name, string cronExpression, Action action, TimeZoneInfo? timeZoneInfo = null, bool allowConcurrentExecution = true) 
+            : this(name, ParseCronExpression(cronExpression), action, timeZoneInfo, allowConcurrentExecution)
         {
         }
 
-        public CronJob(string name, string cronExpression, Func<Task> action)
-            : this(name, ParseCronExpression(cronExpression), action)
+        public CronJob(string name, string cronExpression, Func<Task> action, TimeZoneInfo? timeZoneInfo = null, bool allowConcurrentExecution = true)
+            : this(name, ParseCronExpression(cronExpression), action, timeZoneInfo, allowConcurrentExecution)
         {
         }
 

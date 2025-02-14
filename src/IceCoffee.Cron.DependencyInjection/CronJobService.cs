@@ -31,11 +31,8 @@ public abstract class CronJobService : IHostedService
         {
             if (newOptions.IsEnabled)
             {
-                _cronDaemon.AddJob(new CronJob(Name, newOptions.CronExpression, Execute)
-                {
-                    TimeZoneInfo = GetTimeZoneInfo(newOptions.TimeZone),
-                    AllowConcurrentExecution = newOptions.AllowConcurrentExecution
-                });
+                var job = new CronJob(Name, newOptions.CronExpression, Execute, GetTimeZoneInfo(newOptions.TimeZone), newOptions.AllowConcurrentExecution);
+                _cronDaemon.AddJob(job);
             }
             else
             {
@@ -49,11 +46,7 @@ public abstract class CronJobService : IHostedService
         var options =  _optionsMonitor.Get(Name);
         if (options.IsEnabled)
         {
-            var job = new CronJob(Name, options.CronExpression, Execute)
-            {
-                TimeZoneInfo = GetTimeZoneInfo(options.TimeZone),
-                AllowConcurrentExecution = options.AllowConcurrentExecution
-            };
+            var job = new CronJob(Name, options.CronExpression, Execute, GetTimeZoneInfo(options.TimeZone), options.AllowConcurrentExecution);
             _cronDaemon.AddJob(job);
         }
 
