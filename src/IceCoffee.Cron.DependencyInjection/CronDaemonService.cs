@@ -37,20 +37,27 @@ public class CronDaemonService : IHostedService
 
     private async void OnApplicationStarted()
     {
-        var jobsToRun = _cronDaemon.CronJobs.Values
+        try
+        {
+            var jobsToRun = _cronDaemon.CronJobs.Values
             .Where(job =>
             {
                 var options = _optionsMonitor.Get(job.Name);
                 return options.IsEnabled && options.RunOnceAtStart;
             });
 
-        if (jobsToRun.Any())
-        {
-            _logger.LogInformation("Running jobs once at start...");
-            foreach (var job in jobsToRun)
+            if (jobsToRun.Any())
             {
-                await SafeRunAsync(job.Action);
+                _logger.LogInformation("Running jobs once at start...");
+                foreach (var job in jobsToRun)
+                {
+                    await SafeRunAsync(job.Action);
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in CronDaemonService.OnApplicationStarted.");
         }
     }
 
