@@ -9,15 +9,33 @@ public class CronDaemonService : IHostedService
     private readonly ICronDaemon _cronDaemon;
     private readonly ILogger<CronDaemonService> _logger;
     private readonly IOptionsMonitor<CronJobOptions> _optionsMonitor;
+    private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
-    public CronDaemonService(ICronDaemon cronDaemon, ILogger<CronDaemonService> logger, IOptionsMonitor<CronJobOptions> optionsMonitor)
+    public CronDaemonService(ICronDaemon cronDaemon, ILogger<CronDaemonService> logger, IOptionsMonitor<CronJobOptions> optionsMonitor, IHostApplicationLifetime hostApplicationLifetime)
     {
         _cronDaemon = cronDaemon;
         _logger = logger;
         _optionsMonitor = optionsMonitor;
+        _hostApplicationLifetime = hostApplicationLifetime;
     }
 
-    public virtual async Task StartAsync(CancellationToken cancellationToken)
+    public virtual Task StartAsync(CancellationToken cancellationToken)
+    {
+        _hostApplicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
+
+        _cronDaemon.Start();
+        _logger.LogInformation("Cron daemon started.");
+        return Task.CompletedTask;
+    }
+
+    public virtual Task StopAsync(CancellationToken cancellationToken)
+    {
+        _cronDaemon.Stop();
+        _logger.LogInformation("Cron daemon stopped.");
+        return Task.CompletedTask;
+    }
+
+    private async void OnApplicationStarted()
     {
         var jobsToRun = _cronDaemon.CronJobs.Values
             .Where(job =>
@@ -31,31 +49,21 @@ public class CronDaemonService : IHostedService
             _logger.LogInformation("Running jobs once at start...");
             foreach (var job in jobsToRun)
             {
-                await SafeRunAsync(job.Action, cancellationToken);
+                await SafeRunAsync(job.Action);
             }
         }
-
-        _cronDaemon.Start();
-        _logger.LogInformation("Cron daemon started.");
     }
 
-    public virtual Task StopAsync(CancellationToken cancellationToken)
-    {
-        _cronDaemon.Stop();
-        _logger.LogInformation("Cron daemon stopped.");
-        return Task.CompletedTask;
-    }
-
-    private async Task SafeRunAsync(Func<Task> action, CancellationToken cancellationToken)
+    private async Task SafeRunAsync(Func<Task> action)
     {
         try
         {
             await action();
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-            _logger.LogWarning("Job execution was canceled.");
-        }
+        //catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        //{
+        //    _logger.LogWarning("Job execution was canceled.");
+        //}
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred while running a job at start.");
