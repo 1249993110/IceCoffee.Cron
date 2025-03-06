@@ -65,7 +65,7 @@ public class CronDaemonService : IHostedService
     {
         try
         {
-            await action();
+            await action.Invoke();
         }
         //catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         //{
