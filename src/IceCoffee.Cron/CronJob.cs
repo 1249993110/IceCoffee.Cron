@@ -16,7 +16,7 @@ namespace IceCoffee.Cron
         /// <summary>
         /// Whether the job is running.
         /// </summary>
-        public bool IsRunning => _runningFlag > 0;
+        public bool IsRunning => _runningFlag != 0;
 
         /// <summary>
         /// Job name.
@@ -87,7 +87,7 @@ namespace IceCoffee.Cron
             else
             {
                 // Already running, skip execution.
-                if (Interlocked.CompareExchange(ref _runningFlag, 1, 0) == 1)
+                if (Interlocked.CompareExchange(ref _runningFlag, 1, 0) != 0)
                 {
                     return;
                 }

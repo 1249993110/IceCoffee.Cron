@@ -29,5 +29,10 @@ namespace IceCoffee.Cron.DependencyInjection
         /// Whether the job is run once at start.
         /// </summary>
         public bool RunOnceAtStart {  get; set; }
+
+        /// <summary>
+        /// Delay in seconds before the job is run once at start.
+        /// </summary>
+        public int RunOnceAtStartDelay {  get; set; }
     }
 }
