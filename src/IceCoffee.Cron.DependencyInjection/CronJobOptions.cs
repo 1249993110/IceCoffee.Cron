@@ -31,8 +31,8 @@ namespace IceCoffee.Cron.DependencyInjection
         public bool RunOnceAtStart {  get; set; }
 
         /// <summary>
-        /// Delay in seconds before the job is run once at start.
+        /// Run order at start, the smaller the number, the higher the priority.
         /// </summary>
-        public int RunOnceAtStartDelay {  get; set; }
+        public int RunOrderAtStart { get; set; }
     }
 }

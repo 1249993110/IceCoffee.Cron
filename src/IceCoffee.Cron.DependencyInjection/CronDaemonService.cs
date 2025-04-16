@@ -39,20 +39,27 @@ public class CronDaemonService : IHostedService
     {
         try
         {
-            bool isLog = false;
+            var filteredJobs = new List<(CronJob job, CronJobOptions options)>();
 
             foreach (var job in _cronDaemon.CronJobs.Values)
             {
                 var options = _optionsMonitor.Get(job.Name);
                 if (options.IsEnabled && options.RunOnceAtStart)
                 {
-                    if(isLog == false)
-                    {
-                        _logger.LogInformation("Running jobs once at start...");
-                        isLog = true;
-                    }
-                    
-                    await SafeRunAsync(job.Action, options.RunOnceAtStartDelay);
+                    filteredJobs.Add((job, options));
+                }
+            }
+
+            var jobsToRun = filteredJobs
+                .OrderBy(x => x.options.RunOrderAtStart)
+                .Select(x => x.job);
+
+            if (jobsToRun.Any())
+            {
+                _logger.LogInformation("Running jobs once at start...");
+                foreach (var job in jobsToRun)
+                {
+                    await SafeRunAsync(job.Action);
                 }
             }
         }
@@ -62,14 +69,10 @@ public class CronDaemonService : IHostedService
         }
     }
 
-    private async Task SafeRunAsync(Func<Task> action, int delay)
+    private async Task SafeRunAsync(Func<Task> action)
     {
         try
         {
-            if (delay > 0)
-            {
-                await Task.Delay(delay);
-            }
             await action.Invoke();
         }
         //catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
