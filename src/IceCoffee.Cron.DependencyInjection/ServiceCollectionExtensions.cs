@@ -10,38 +10,38 @@ namespace IceCoffee.Cron.DependencyInjection
         public static IServiceCollection AddCronJob<T>(this IServiceCollection services, Action<CronJobOptions> configure) where T : CronJobService
         {
             services.InternalAdd<T>(typeof(T).Name);
-            services.AddOptions<CronJobOptions>(typeof(T).Name).Configure(configure).ValidateOnStart();
+            services.AddOptions<CronJobOptions>(typeof(T).Name).Configure(configure).ValidateDataAnnotations().ValidateOnStart();
             return services;
         }
         public static IServiceCollection AddCronJob<T>(this IServiceCollection services, string name, Action<CronJobOptions> configure) where T : CronJobService
         {
             services.InternalAdd<T>(name);
-            services.AddOptions<CronJobOptions>(name).Configure(configure).ValidateOnStart();
+            services.AddOptions<CronJobOptions>(name).Configure(configure).ValidateDataAnnotations().ValidateOnStart();
             return services;
         }
 
         public static IServiceCollection AddCronJob<T>(this IServiceCollection services, IConfiguration configuration) where T : CronJobService
         {
             services.InternalAdd<T>(typeof(T).Name);
-            services.AddOptions<CronJobOptions>(typeof(T).Name).Bind(configuration).ValidateOnStart();
+            services.AddOptions<CronJobOptions>(typeof(T).Name).Bind(configuration).ValidateDataAnnotations().ValidateOnStart();
             return services;
         }
         public static IServiceCollection AddCronJob<T>(this IServiceCollection services, string name, IConfiguration configuration) where T : CronJobService
         {
             services.InternalAdd<T>(name);
-            services.AddOptions<CronJobOptions>(name).Bind(configuration).ValidateOnStart();
+            services.AddOptions<CronJobOptions>(name).Bind(configuration).ValidateDataAnnotations().ValidateOnStart();
             return services;
         }
 
         public static IServiceCollection AddCronJob<T>(this IServiceCollection services, string configurationSectionPath) where T : CronJobService
         {
-            services.AddOptions<CronJobOptions>(typeof(T).Name).BindConfiguration(configurationSectionPath).ValidateOnStart();
+            services.AddOptions<CronJobOptions>(typeof(T).Name).BindConfiguration(configurationSectionPath).ValidateDataAnnotations().ValidateOnStart();
             services.InternalAdd<T>(typeof(T).Name);
             return services;
         }
         public static IServiceCollection AddCronJob<T>(this IServiceCollection services, string name, string configurationSectionPath) where T : CronJobService
         {
-            services.AddOptions<CronJobOptions>(name).BindConfiguration(configurationSectionPath).ValidateOnStart();
+            services.AddOptions<CronJobOptions>(name).BindConfiguration(configurationSectionPath).ValidateDataAnnotations().ValidateOnStart();
             services.InternalAdd<T>(name);
             return services;
         }
